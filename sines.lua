@@ -171,10 +171,13 @@ local function play_note(fundamental, harmonics, ant)
 end
 
 local function attach_sines(ant, num)
-    local note_idx = math.random(#notes)
-    local note = notes[note_idx]
-    ant.root_note = note
-    ant.ant_number = num * 10
+    local r = #notes or false
+    if r and r > 0 then
+        local note_idx = math.random(r)
+        local note = notes[note_idx]
+        ant.root_note = note
+        ant.ant_number = num * 10
+    end
 end
 
 local function step()
@@ -193,6 +196,9 @@ local function step()
 end
 
 local function reset_ants(num)
+    if not num then
+        num = #ants
+    end
     ants = nil
     ants = {}
 
@@ -288,6 +294,7 @@ local function init_params()
         default = 39,
         action = function()
             generate_scale()
+            reset_ants()
         end
     }
     params:add {
@@ -299,6 +306,7 @@ local function init_params()
         default = 2,
         action = function()
             generate_scale()
+            reset_ants()
         end
     }
     params:add_separator()
