@@ -5,22 +5,14 @@
 
 engine.name = "Sines"
 
-local RELOAD_LIBS = true
+-- DEPENDENCIES --
+local MusicUtil = require("musicutil")
+local json = include("langtons_ant/lib/json")
+local BeatClock = require "beatclock"
 
-local MusicUtil = require "musicutil"
-local json = require "agents/lib/json"
-
-local libs = {
-    world_path = "agents/lib/world",
-    ant_path = "agents/lib/ant"
-}
-if RELOAD_LIBS then
-    local reload_libraries = require "agents/lib/reload_libraries"
-    reload_libraries.with_table(libs)
-end
-
-local Ant = require(libs.ant_path)
-local World = require(libs.world_path)
+-- SCRIPT VARS --
+local Ant = include("langtons_ant/lib/ant")
+local World = include("langtons_ant/lib/world")
 
 local ants = {}
 local world = {}
@@ -28,7 +20,6 @@ local world = {}
 local scale_names = {}
 local notes = {}
 
-local BeatClock = require "beatclock"
 local clk = BeatClock.new()
 local clk_midi = midi.connect()
 clk_midi.event = function(data)
