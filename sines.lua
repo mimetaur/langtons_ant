@@ -10,6 +10,9 @@ local MusicUtil = require("musicutil")
 local json = include("langtons_ant/lib/json")
 local BeatClock = require "beatclock"
 
+local Billboard = include("billboard/lib/billboard")
+local billboard = Billboard.new()
+
 -- SCRIPT VARS --
 local Ant = include("langtons_ant/lib/ant")
 local World = include("langtons_ant/lib/world")
@@ -313,7 +316,8 @@ local function init_params()
         min = 1,
         max = 6,
         default = 2,
-        action = function()
+        action = function(val)
+            billboard:display_param("octave range", math.ceil(val))
             generate_scale()
             reset_ants()
         end
@@ -327,8 +331,10 @@ local function init_params()
         max = 8,
         default = 1,
         action = function(value)
+            local v = math.ceil(value)
+            billboard:display_param("number of ants", v)
             local opt = {}
-            opt.num_ants = value
+            opt.num_ants = v
             reset(opt)
         end
     }
@@ -341,7 +347,10 @@ local function init_params()
         name = "attack time",
         min = 0.25,
         max = 4.0,
-        default = 2.0
+        default = 2.0,
+        action = function(value)
+            billboard:display_param("attack time", value)
+        end
     }
     params:add {
         type = "number",
@@ -349,7 +358,10 @@ local function init_params()
         name = "release_time",
         min = 0.25,
         max = 4.0,
-        default = 2.0
+        default = 2.0,
+        action = function(value)
+            billboard:display_param("release time", value)
+        end
     }
 
     arc_params:register("attack_time", 0.1)
@@ -439,6 +451,7 @@ function redraw()
     if not is_paused then
         world:draw()
     end
+    billboard:draw()
     draw_ui()
     screen.update()
 end
