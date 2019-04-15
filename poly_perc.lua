@@ -297,12 +297,15 @@ local function init_params()
         max = 1400,
         default = 900
     }
-    params:default()
 
-    arc_params:register_at(1, "min_release", 0.25)
-    arc_params:register_at(2, "max_release", 0.25)
-    arc_params:register_at(3, "min_cutoff", 10)
-    arc_params:register_at(4, "max_cutoff", 10)
+    arc_params:register("min_release", 0.25)
+    arc_params:register("max_release", 0.25)
+    arc_params:register("min_cutoff", 10)
+    arc_params:register("max_cutoff", 10)
+
+    arc_params:add_arc_params()
+
+    params:default()
 
     generate_scale()
 end
