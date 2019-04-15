@@ -37,6 +37,15 @@ local MAX_AGE = 20000
 dest = {"192.168.1.12", 10112}
 local connected_osc = false
 
+-- arc
+local ar = arc.connect()
+local ArcParams = include("arc_params/lib/arc_params")
+local arc_params = ArcParams.new(ar)
+
+function ar.delta(n, delta)
+    arc_params:update(n, delta)
+end
+
 -------------------------------------------------------------------------------
 -- OSC
 -------------------------------------------------------------------------------
@@ -342,6 +351,14 @@ local function init_params()
         max = 4.0,
         default = 2.0
     }
+
+    arc_params:register("attack_time", 0.1)
+    arc_params:register("release_time", 0.1)
+    arc_params:register("num_ants", 0.1)
+    arc_params:register("octave_range", 0.1)
+
+    arc_params:add_arc_params()
+
     params:default()
 
     generate_scale()
