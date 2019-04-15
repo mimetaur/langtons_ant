@@ -16,6 +16,9 @@ local Ant = include("langtons_ant/lib/ant")
 local World = include("langtons_ant/lib/world")
 local ArcParams = include("arc_params/lib/arc_params")
 
+local Billboard = include("billboard/lib/billboard")
+local billboard = Billboard.new()
+
 -- SCRIPT VARS --
 local ants = {}
 local world = {}
@@ -271,7 +274,10 @@ local function init_params()
         name = "min release time",
         min = 0.25,
         max = 4,
-        default = 0.5
+        default = 0.5,
+        action = function(value)
+            billboard:display_param("min release", math.ceil(value))
+        end
     }
     params:add {
         type = "number",
@@ -279,7 +285,10 @@ local function init_params()
         name = "max release time",
         min = 0.5,
         max = 12,
-        default = 6
+        default = 6,
+        action = function(value)
+            billboard:display_param("max release", math.ceil(value))
+        end
     }
     params:add {
         type = "number",
@@ -287,7 +296,10 @@ local function init_params()
         name = "min cutoff amount",
         min = 100,
         max = 800,
-        default = 400
+        default = 400,
+        action = function(value)
+            billboard:display_param("min cutoff", math.ceil(value))
+        end
     }
     params:add {
         type = "number",
@@ -295,7 +307,10 @@ local function init_params()
         name = "max cutoff amount",
         min = 600,
         max = 1400,
-        default = 900
+        default = 900,
+        action = function(value)
+            billboard:display_param("max cutoff", math.ceil(value))
+        end
     }
 
     arc_params:register("min_release", 0.25)
@@ -367,6 +382,7 @@ function redraw()
     if not is_paused then
         world:draw()
     end
+    billboard:draw()
     draw_ui()
     screen.update()
 end
