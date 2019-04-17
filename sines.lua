@@ -41,13 +41,8 @@ dest = {"192.168.1.12", 10112}
 local connected_osc = false
 
 -- arc
-local my_arc = arc.connect()
 local Arcify = include("arcify/lib/arcify")
-local arcify = Arcify.new(my_arc)
-
-function my_arc.delta(n, delta)
-    arcify:update(n, delta)
-end
+local arcify = Arcify.new()
 
 -------------------------------------------------------------------------------
 -- OSC
@@ -361,7 +356,7 @@ local function init_params()
     arcify:register("num_ants", 0.1)
     arcify:register("octave_range", 0.1)
 
-    arcify:add_arc_params()
+    arcify:add_params()
 
     params:default()
 

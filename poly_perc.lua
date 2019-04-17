@@ -14,7 +14,6 @@ local json = include("langtons_ant/lib/json")
 
 local Ant = include("langtons_ant/lib/ant")
 local World = include("langtons_ant/lib/world")
-local Arcify = include("arcify/lib/arcify")
 
 local Billboard = include("billboard/lib/billboard")
 local billboard = Billboard.new()
@@ -35,13 +34,8 @@ end
 
 local note_amp = 0.3
 
--- arc
-local my_arc = arc.connect()
-local arcify = Arcify.new(my_arc)
-
-function my_arc.delta(n, delta)
-    arcify:update(n, delta)
-end
+local Arcify = include("arcify/lib/arcify")
+local arcify = Arcify.new()
 
 -- OSC
 dest = {"192.168.1.12", 10112}
@@ -199,6 +193,7 @@ local function init_params()
             local opt = {}
             opt.num_ants = value
             reset(opt)
+            billboard:display_param("number of ants", util.round(value, 1.0))
         end
     }
     params:add_separator()
@@ -251,8 +246,9 @@ local function init_params()
         min = 1,
         max = 6,
         default = 3,
-        action = function()
+        action = function(value)
             generate_scale()
+            billboard:display_param("octave range", util.round(value, 1.0))
         end
     }
     params:add_separator()
@@ -267,7 +263,7 @@ local function init_params()
         max = 4,
         default = 0.5,
         action = function(value)
-            billboard:display_param("min release", math.ceil(value))
+            billboard:display_param("min release", util.round(value, 1.0))
         end
     }
     params:add {
@@ -278,7 +274,7 @@ local function init_params()
         max = 12,
         default = 6,
         action = function(value)
-            billboard:display_param("max release", math.ceil(value))
+            billboard:display_param("max release", util.round(value, 1.0))
         end
     }
     params:add {
@@ -289,7 +285,7 @@ local function init_params()
         max = 800,
         default = 400,
         action = function(value)
-            billboard:display_param("min cutoff", math.ceil(value))
+            billboard:display_param("min cutoff", util.round(value, 1.0))
         end
     }
     params:add {
@@ -304,12 +300,14 @@ local function init_params()
         end
     }
 
+    arcify:register("octave_range", 0.1)
+    arcify:register("num_ants", 0.1)
     arcify:register("min_release", 0.25)
     arcify:register("max_release", 0.25)
     arcify:register("min_cutoff", 10)
     arcify:register("max_cutoff", 10)
 
-    arcify:add_arc_params()
+    arcify:add_params()
 
     params:default()
 
