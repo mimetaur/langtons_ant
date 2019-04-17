@@ -14,7 +14,7 @@ local json = include("langtons_ant/lib/json")
 
 local Ant = include("langtons_ant/lib/ant")
 local World = include("langtons_ant/lib/world")
-local ArcParams = include("arc_params/lib/arc_params")
+local Arcify = include("arcify/lib/arcify")
 
 local Billboard = include("billboard/lib/billboard")
 local billboard = Billboard.new()
@@ -36,11 +36,11 @@ end
 local note_amp = 0.3
 
 -- arc
-local ar = arc.connect()
-local arc_params = ArcParams.new(ar)
+local my_arc = arc.connect()
+local arcify = Arcify.new(my_arc)
 
-function ar.delta(n, delta)
-    arc_params:update(n, delta)
+function my_arc.delta(n, delta)
+    arcify:update(n, delta)
 end
 
 -- OSC
@@ -176,18 +176,9 @@ local function reset(options)
 end
 
 local function draw_ui()
-    local y_offset = 6
-    local x_offset = 0
+    local y_offset = 26
+    local x_offset = 8
     local line_height = 10
-    if is_paused then
-        y_offset = 26
-        x_offset = 8
-    end
-
-    screen.move(x_offset, y_offset)
-    screen.text("Langton's Ant")
-    screen.move(x_offset + 64, y_offset)
-    screen.text("[PolyPerc]")
     if is_paused then
         screen.move(40, y_offset + line_height)
         screen.text("- PAUSED -")
@@ -313,12 +304,12 @@ local function init_params()
         end
     }
 
-    arc_params:register("min_release", 0.25)
-    arc_params:register("max_release", 0.25)
-    arc_params:register("min_cutoff", 10)
-    arc_params:register("max_cutoff", 10)
+    arcify:register("min_release", 0.25)
+    arcify:register("max_release", 0.25)
+    arcify:register("min_cutoff", 10)
+    arcify:register("max_cutoff", 10)
 
-    arc_params:add_arc_params()
+    arcify:add_arc_params()
 
     params:default()
 
