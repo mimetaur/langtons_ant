@@ -41,12 +41,12 @@ dest = {"192.168.1.12", 10112}
 local connected_osc = false
 
 -- arc
-local ar = arc.connect()
-local ArcParams = include("arc_params/lib/arc_params")
-local arc_params = ArcParams.new(ar)
+local my_arc = arc.connect()
+local Arcify = include("arcify/lib/arcify")
+local arcify = Arcify.new(my_arc)
 
-function ar.delta(n, delta)
-    arc_params:update(n, delta)
+function my_arc.delta(n, delta)
+    arcify:update(n, delta)
 end
 
 -------------------------------------------------------------------------------
@@ -249,15 +249,7 @@ local function reset(options)
 end
 
 local function draw_ui()
-    local y_offset = 6
-    local line_height = 10
-    if is_paused then
-        y_offset = 26
-    end
-    screen.move(0, y_offset)
-    screen.text("Langton's Ant")
-    screen.move(64, y_offset)
-    screen.text("[Additive Sines]")
+    local y_offset = 26
     if is_paused then
         screen.move(40, y_offset + line_height)
         screen.text("- PAUSED -")
@@ -364,12 +356,12 @@ local function init_params()
         end
     }
 
-    arc_params:register("attack_time", 0.1)
-    arc_params:register("release_time", 0.1)
-    arc_params:register("num_ants", 0.1)
-    arc_params:register("octave_range", 0.1)
+    arcify:register("attack_time", 0.1)
+    arcify:register("release_time", 0.1)
+    arcify:register("num_ants", 0.1)
+    arcify:register("octave_range", 0.1)
 
-    arc_params:add_arc_params()
+    arcify:add_arc_params()
 
     params:default()
 
